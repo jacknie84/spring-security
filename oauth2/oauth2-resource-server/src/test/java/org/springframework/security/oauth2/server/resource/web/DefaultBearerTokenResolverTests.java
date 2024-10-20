@@ -266,15 +266,14 @@ public class DefaultBearerTokenResolverTests {
 		this.resolver.setAllowUriQueryParameter(true);
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		request.setMethod("GET");
-		request.setQueryString("access_token=");
 		request.addParameter("access_token", "");
 		assertThatExceptionOfType(OAuth2AuthenticationException.class).isThrownBy(() -> this.resolver.resolve(request))
-				.withMessageContaining("The requested token parameter is an empty string")
-				.satisfies(e -> {
-					BearerTokenError error = (BearerTokenError) e.getError();
-					assertThat(error.getErrorCode()).isEqualTo(BearerTokenErrorCodes.INVALID_REQUEST);
-					assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-				});
+			.withMessageContaining("The requested token parameter is an empty string")
+			.satisfies((e) -> {
+				BearerTokenError error = (BearerTokenError) e.getError();
+				assertThat(error.getErrorCode()).isEqualTo(BearerTokenErrorCodes.INVALID_REQUEST);
+				assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+			});
 	}
 
 	@Test
@@ -285,12 +284,12 @@ public class DefaultBearerTokenResolverTests {
 		request.setContentType("application/x-www-form-urlencoded");
 		request.addParameter("access_token", "");
 		assertThatExceptionOfType(OAuth2AuthenticationException.class).isThrownBy(() -> this.resolver.resolve(request))
-				.withMessageContaining("The requested token parameter is an empty string")
-				.satisfies(e -> {
-					BearerTokenError error = (BearerTokenError) e.getError();
-					assertThat(error.getErrorCode()).isEqualTo(BearerTokenErrorCodes.INVALID_REQUEST);
-					assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-				});
+			.withMessageContaining("The requested token parameter is an empty string")
+			.satisfies((e) -> {
+				BearerTokenError error = (BearerTokenError) e.getError();
+				assertThat(error.getErrorCode()).isEqualTo(BearerTokenErrorCodes.INVALID_REQUEST);
+				assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
+			});
 	}
 
 }
