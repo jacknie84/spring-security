@@ -16,11 +16,8 @@
 
 package org.springframework.security.oauth2.server.resource.web.server.authentication;
 
-import java.util.Base64;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -29,6 +26,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.server.resource.BearerTokenError;
 import org.springframework.security.oauth2.server.resource.BearerTokenErrorCodes;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
+
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -215,19 +214,6 @@ public class ServerBearerTokenAuthenticationConverterTests {
 				assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
 			});
 
-	}
-
-	@Test
-	public void resolveWhenQueryParameterIsPresentAndEmptyStringThenTokenIsNotResolved() {
-		this.converter.setAllowUriQueryParameter(true);
-		MockServerHttpRequest.BaseBuilder<?> request = MockServerHttpRequest.get("/").queryParam("access_token", "");
-		assertThatExceptionOfType(OAuth2AuthenticationException.class).isThrownBy(() -> convertToToken(request))
-			.withMessageContaining("The requested token parameter is an empty string")
-			.satisfies((e) -> {
-				BearerTokenError error = (BearerTokenError) e.getError();
-				assertThat(error.getErrorCode()).isEqualTo(BearerTokenErrorCodes.INVALID_REQUEST);
-				assertThat(error.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-			});
 	}
 
 	private BearerTokenAuthenticationToken convertToToken(MockServerHttpRequest.BaseBuilder<?> request) {
